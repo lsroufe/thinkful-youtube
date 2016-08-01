@@ -8,23 +8,28 @@ $(function(){
 });
 
 function getRequest(search) {
-	var params = {
-		s: search,
-		r: 'json'
+	var query = {
+		key: 'AIzaSyDZgWbSmxsdkk7qk5vbcfEY9X-YBunoNDU',
+		part: 'snippet',
+    type: 'video',
+    q: search
 	};
-	url = 'http://www.omdbapi.com';
+	var url = 'https://www.googleapis.com/youtube/v3/search';
 
-	$.getJSON(url, params, function(data){
-    	showResults(data.Search);
-    });
+	$.getJSON(url, query, function(data){
+  	showResults(data);
+  });
 };
 
 function showResults(results) {
 	var html = "";
-    $.each(results, function(index, value){
- 		html += '<p>' + value.Title + '</p>';
-        console.log(value.Title);
-    });
 
-    $('#search-results').html(html);
+  // console.log(results);
+
+  $.each(results.items, function(index, value){
+		html += '<a href="https://www.youtube.com/watch?v=' + value.id.videoId + '" target="_blank">' + '<img src="' + value.snippet.thumbnails.high.url + '"/>' + '</a>'
+    console.log(value.snippet.title);
+  });
+
+  $('#search-results').html(html);
 };
